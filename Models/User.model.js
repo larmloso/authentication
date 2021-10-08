@@ -3,6 +3,11 @@ const Schema = mongoose.Schema
 const bcrypt = require('bcrypt')
 
 const UserSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+    lowercase: true,
+  },
   email: {
     type: String,
     required: true,
@@ -13,10 +18,6 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  username: {
-    type: String,
-    required: true,
-  }
 })
 
 UserSchema.pre('save', async function (next) {
