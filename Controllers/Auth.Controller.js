@@ -53,4 +53,39 @@ module.exports = {
             next(error)
         }
     },
+
+    refreshToken: async (req, res, next) => {
+        try {
+            const refreshToken = req.headers.authorization.split(" ")[1]; /// delete "" Bearer
+            //const { refreshToken } = req.body
+            if (!refreshToken) throw createError.BadRequest()
+            const userId = await verifyRefreshToken(refreshToken)
+
+            const accessToken = await signAccessToken(userId)
+            const refToken = await signRefreshToken(userId)
+            res.send({ accessToken: accessToken, refreshToken: refToken })
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    logout: async (req, res, next) => {
+        try {
+            //const refreshToken = req.headers.authorization.split(" ")[1]; /// delete "" Bearer
+            const { refreshToken } = req.body
+            if (!refreshToken) throw createError.BadRequest()
+            const userId = await verifyRefreshToken(refreshToken)
+            client.DEL(userId, (err, val) => {
+                if (err) {
+                    console.log(err.message)
+                    throw createError.InternalServerError()
+                }
+                console.log(val)
+                res.sendStatus(204)
+            })
+        } catch (error) {
+            next(error)
+        }
+
+    },
 }
