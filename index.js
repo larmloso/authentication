@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser').json();
-//const createError = require('http-errors')
 
 require('dotenv').config()
 require('./helpers/init_mongodb')
@@ -16,15 +15,6 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/api/auth', AuthRoute)
 
-
-// app.get('/', verifyAccessToken, async (req, res, next) => {
-//     res.send('Hello from express.')
-// })
-// app.use(async (req, res, next) => {
-//     next(createError.NotFound())
-// })
-
-// next()
 app.use((err, req, res, next) => {
     res.status(err.status || 500)
     res.send({
@@ -35,7 +25,7 @@ app.use((err, req, res, next) => {
     })
 })
 
-const PORT = 3100;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`server running port ${PORT}`)
 })

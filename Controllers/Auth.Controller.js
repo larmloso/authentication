@@ -24,7 +24,8 @@ module.exports = {
             const savedUser = await user.save()
             const accessToken = await signAccessToken(savedUser.id)
             const refreshToken = await signRefreshToken(savedUser.id)
-
+            
+            console.log(`[ INFO ] new user ${result.email}`)
             res.send({ accessToken, refreshToken })
 
         } catch (error) {
